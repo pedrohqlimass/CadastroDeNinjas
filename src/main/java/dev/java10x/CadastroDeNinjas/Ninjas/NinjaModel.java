@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 //Entity transforma uma classe em uma entidade no banco de dados
 //JPA = Java Persistence API
 @Entity
-@Table(name = "tb-cadastro")
+@Table(name = "tb_cadastro")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +23,7 @@ public class NinjaModel {
     @Column (name = "nome")
     private String nome;
 
-    @Column(unique = true)
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column (name = "img_url")
@@ -35,6 +35,6 @@ public class NinjaModel {
     // @ManyToOne - muitos ninjas para uma unica missao
     @ManyToOne
     @JoinColumn(name = "missoes_id") // Foreing Key ou chave estrangeira
-    private MissaoModel missaoModel;
+    private MissaoModel missoes;
 
 }
