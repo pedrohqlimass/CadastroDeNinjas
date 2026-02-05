@@ -4,8 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/missoes")
-public class MissoesController {
-
+public class MissaoController {
     // GET -- Mandar uma requisição para LISTAR as missões
     @GetMapping("/listar")
     public String listarMissoes() {
