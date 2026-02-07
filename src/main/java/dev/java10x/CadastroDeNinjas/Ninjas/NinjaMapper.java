@@ -1,35 +1,67 @@
 package dev.java10x.CadastroDeNinjas.Ninjas;
 
+import dev.java10x.CadastroDeNinjas.Missoes.MissaoMapper;
 import org.springframework.stereotype.Component;
+import java.util.stream.Collectors;
+
+import java.util.List;
 
 @Component
 public class NinjaMapper {
-    
-    public NinjaModel map(NinjaDTO ninjaDTO) {
 
-        NinjaModel ninjaModel = new NinjaModel();
-        ninjaModel.setId(ninjaDTO.getId());
-        ninjaModel.setNome(ninjaDTO.getNome());
-        ninjaModel.setEmail(ninjaDTO.getEmail());
-        ninjaModel.setIdade(ninjaDTO.getIdade());
-        ninjaModel.setImgUrl(ninjaDTO.getImgUrl());
-        ninjaModel.setRank(ninjaDTO.getRank());
-        ninjaModel.setMissoes(ninjaDTO.getMissoes());
+    private final MissaoMapper missaoMapper;
 
-        return ninjaModel;
+    public NinjaMapper(MissaoMapper missaoMapper) {
+        this.missaoMapper = missaoMapper;
     }
 
-    public NinjaDTO map(NinjaModel ninjaModel) {
+    public NinjaModel toModel(NinjaDTO dto) {
+        if (dto == null) return null;
 
-        NinjaDTO ninjaDTO = new NinjaDTO();
-        ninjaDTO.setId(ninjaModel.getId());
-        ninjaDTO.setNome(ninjaModel.getNome());
-        ninjaDTO.setEmail(ninjaModel.getEmail());
-        ninjaDTO.setIdade(ninjaModel.getIdade());
-        ninjaDTO.setImgUrl(ninjaModel.getImgUrl());
-        ninjaDTO.setRank(ninjaModel.getRank());
-        ninjaDTO.setMissoes(ninjaModel.getMissoes());
+        NinjaModel model = new NinjaModel();
+        model.setId(dto.getId());
+        model.setNome(dto.getNome());
+        model.setEmail(dto.getEmail());
+        model.setIdade(dto.getIdade());
+        model.setImgUrl(dto.getImgUrl());
+        model.setRank(dto.getRank());
+        model.setMissao(missaoMapper.toModel(dto.getMissoes()));
+        model.setCriadoEm(dto.getCriadoEm());
+        model.setAtualizadoEm(dto.getAtualizadoEm());
 
-        return ninjaDTO;
+        return model;
+    }
+
+    public NinjaDTO toDTO(NinjaModel model) {
+        if (model == null) return null;
+
+        NinjaDTO dto = new NinjaDTO();
+        dto.setId(model.getId());
+        dto.setNome(model.getNome());
+        dto.setEmail(model.getEmail());
+        dto.setIdade(model.getIdade());
+        dto.setImgUrl(model.getImgUrl());
+        dto.setRank(model.getRank());
+        dto.setMissoes(missaoMapper.toDTO(model.getMissao()));
+        dto.setCriadoEm(model.getCriadoEm());
+        dto.setAtualizadoEm(model.getAtualizadoEm());
+
+        return dto;
+    }
+
+    public List<NinjaDTO> toDTOList(List<NinjaModel> models) {
+        if (models == null) return List.of();
+
+        return models.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<NinjaModel> toModelList(List<NinjaDTO> dtos) {
+        if (dtos == null) return List.of();
+
+        return dtos.stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
     }
 }
