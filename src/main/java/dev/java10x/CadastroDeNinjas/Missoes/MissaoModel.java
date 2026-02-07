@@ -6,11 +6,16 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "tb_missoes")
+@SQLDelete(sql = "UPDATE tb_missoes SET deletado_em = NOW() WHERE id = ?")
+@Where(clause = "deletado_em IS NULL")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,8 +30,27 @@ public class MissaoModel {
     private String dificuldade;
 
     // @OneToMany - uma unica missao para muitos ninjas
-    @OneToMany(mappedBy = "missoes")
+    @OneToMany(mappedBy = "missao")
     @JsonIgnore
-    private List<NinjaModel> ninjaModel;
+    private List<NinjaModel> ninjas;
 
+    @Column(name = "criado_em", updatable = false)
+    private LocalDateTime criadoEm;
+
+    @Column(name = "atualizado_em")
+    private LocalDateTime atualizadoEm;
+
+    @Column(name = "deletado_em")
+    private LocalDateTime deletadoEm;
+
+    @PrePersist
+    public void prePersist() {
+        criadoEm = LocalDateTime.now();
+        atualizadoEm = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        atualizadoEm = LocalDateTime.now();
+    }
 }
