@@ -1,0 +1,5 @@
+ALTER TABLE tb_cadastro
+ADD COLUMN IF NOT EXISTS deletado_em TIMESTAMP;
+
+ALTER TABLE tb_missoes
+ADD COLUMN IF NOT EXISTS deletado_em TIMESTAMP;
