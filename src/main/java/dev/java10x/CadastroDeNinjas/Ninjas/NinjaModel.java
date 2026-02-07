@@ -5,11 +5,17 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+import java.time.LocalDateTime;
 
 //Entity transforma uma classe em uma entidade no banco de dados
 //JPA = Java Persistence API
 @Entity
 @Table(name = "tb_cadastro")
+@SQLDelete(sql = "UPDATE tb_cadastro SET deletado_em = NOW() WHERE id = ?")
+@Where(clause = "deletado_em IS NULL")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,24 +26,41 @@ public class NinjaModel {
     @Column (name = "id")
     private Long id;
 
-    @Column (name = "nome")
     private String nome;
 
-    @Column(name = "email", unique = true)
+    @Column(unique = true)
     private String email;
 
     @Column (name = "img_url")
     private String imgUrl;
 
-    @Column (name = "rank")
     private String rank;
 
-    @Column (name = "idade")
     private int idade;
 
     // @ManyToOne - muitos ninjas para uma unica missao
     @ManyToOne
     @JoinColumn(name = "missoes_id") // Foreing Key ou chave estrangeira
-    private MissaoModel missoes;
+    private MissaoModel missao;
 
+    // Campos de auditoria
+    @Column(name = "criado_em", updatable = false)
+    private LocalDateTime criadoEm;
+
+    @Column(name = "atualizado_em")
+    private LocalDateTime atualizadoEm;
+
+    @Column(name = "deletado_em")
+    private LocalDateTime deletadoEm;
+
+    @PrePersist
+    public void prePersist() {
+        criadoEm = LocalDateTime.now();
+        atualizadoEm = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        atualizadoEm = LocalDateTime.now();
+    }
 }
