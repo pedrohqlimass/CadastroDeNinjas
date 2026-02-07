@@ -1,9 +1,12 @@
 package dev.java10x.CadastroDeNinjas.Ninjas;
 
-import dev.java10x.CadastroDeNinjas.Missoes.MissaoModel;
+import dev.java10x.CadastroDeNinjas.Missoes.MissaoDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -16,6 +19,9 @@ public class NinjaDTO {
     private String imgUrl;
     private int idade;
     private String rank;
-    private MissaoModel missoes;
 
+    private MissaoDTO missoes;
+
+    private LocalDateTime criadoEm;
+    private LocalDateTime atualizadoEm;
 }
